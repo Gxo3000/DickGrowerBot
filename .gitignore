@@ -1,8 +1,4 @@
-/**/target
-/data
-.env
 .idea
-
-# The serverless version: the CLI state holds the access token
 node_modules/
+# The CLI state, the access token included
 .tgcloud/

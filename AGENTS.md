@@ -1,8 +1,9 @@
-# AGENTS.md — the Telegram Serverless version
+# AGENTS.md
 
-This file covers the bot in `tgcloud/`: a JavaScript rewrite of DickGrowerBot for
-[Telegram Serverless](https://core.telegram.org/bots/serverless) (tgcloud). The Rust bot in `src/` is the original and is described in `CLAUDE.md`; the two share no code
-and no database. The platform's own reference is [docs/tgcloud-sdk.md](docs/tgcloud-sdk.md).
+DickGrowerBot for [Telegram Serverless](https://core.telegram.org/bots/serverless) (tgcloud): the
+bot is the JavaScript in `tgcloud/`, run by the platform. It is a rewrite of the Rust bot by
+kozalosev, which lives on in this repository's history. The platform's own reference is
+[docs/tgcloud-sdk.md](docs/tgcloud-sdk.md).
 
 ## Commands
 
@@ -91,7 +92,19 @@ the two seams for time and luck.
 
 ## Code style
 
-The conventions of `CLAUDE.md` apply where they are not about Rust: a comment describes the code and
-never the change, a module never names its callers, a file reads from its public surface down,
-combinators over branches where there are two outcomes. Log with a constant message and the values as
-an object: `console.error('could not handle a message', { chatId }, e)`.
+* **A comment describes the code, never the change.** What the code does, and why if that isn't
+  obvious — no mention of a diff, an issue or the previous version, and no comment left behind by
+  removed code. The reasoning worth keeping goes here or in the commit message; when nothing
+  non-obvious is left to say, write no comment.
+* **A comment never points against the dependencies.** A module may say what it is and what it uses,
+  never who uses it: no roll-call of callers in `repo/` or `lib/`. Such a comment rots silently when a
+  caller moves.
+* **A file reads from its public surface downwards.** Constants first, then the exported functions,
+  then the private helpers under what they serve.
+* **A log message is a constant; the values go in an object.** `console.error('could not handle a
+  message', { chatId }, e)`, so repeated events read alike. Messages are lower-case with no trailing
+  dot.
+* **Lines stay under 120 characters.** Break a long call at its arguments, and in a test bind a
+  result to a name before asserting on it.
+* **A setting is a field of `config`**, never a literal in a feature. Tests change `config` directly;
+  `useBot()` restores it.

@@ -1,5 +1,5 @@
 // Every setting of the bot. The platform has no environment variables, so this module is where a
-// deployment is tuned; see CLAUDE.md for what each knob does.
+// deployment is tuned.
 
 export const config = {
   // Telegram user ids allowed to use the admin commands (/ban, /promo_add, …) in a private chat.

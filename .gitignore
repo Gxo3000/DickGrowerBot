@@ -2,3 +2,7 @@
 /data
 .env
 .idea
+
+# The serverless version: the CLI state holds the access token
+node_modules/
+.tgcloud/

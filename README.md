@@ -5,6 +5,29 @@
 
 A game bot for group chats that let its users grow their virtual "dicks" every day for some random count of centimeters (including negative values) and compete with friends and other chat members.
 
+Telegram Serverless version
+---------------------------
+
+`tgcloud/` holds a JavaScript rewrite of the bot that runs on
+[Telegram Serverless](https://core.telegram.org/bots/serverless) — no server, no Postgres, no Docker.
+It plays the same game (growth, the top, the Dick of the Day, battles, loans, streaks, the daily
+shrink, promo codes, imports, topics, languages, inline mode, `/support`) and adds:
+
+* **/adventure** — fight a monster alone once a day: easy, medium or hard, the harder the richer;
+* **/boss** — a raid boss for the whole chat, the reward shared by the damage dealt;
+* **/lottery** — a daily lottery with tickets bought for centimetres.
+
+```shell
+npm install
+npm test                 # offline, against an emulator of the platform
+npx tgcloud login        # the CLI access token from @BotFather → your bot → Serverless
+npx tgcloud push && npx tgcloud migrate
+```
+
+Settings live in [tgcloud/lib/config.js](tgcloud/lib/config.js) — put your Telegram id into
+`admins` to get `/sync_commands`, `/promo_add` and `/ban`. See [AGENTS.md](AGENTS.md) for how it is
+built.
+
 Additional mechanics
 --------------------
 _(compared with some competitors)_

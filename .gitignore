@@ -1,4 +1,4 @@
-/**/target
-/data
-.env
 .idea
+node_modules/
+# The CLI state, the access token included
+.tgcloud/

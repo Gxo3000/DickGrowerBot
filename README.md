@@ -1,203 +1,65 @@
-[@DickGrowerBot](https://t.me/DickGrowerBot)
-============================================
+DickGrowerBot for Telegram Serverless
+=====================================
 
-[![CI Build](https://github.com/kozalosev/DickGrowerBot/actions/workflows/ci-build.yaml/badge.svg?branch=main&event=push)](https://github.com/kozalosev/DickGrowerBot/actions/workflows/ci-build.yaml) [![@DickGrowerBot MAU](https://tgbotmau.quoi.dev/api/bot/DickGrowerBot/mau/badge?style=flat "@DickGrowerBot MAU")](https://tgbotmau.quoi.dev/?bot=DickGrowerBot)
+[![Serverless](https://github.com/Gxo3000/DickGrowerBot/actions/workflows/serverless.yaml/badge.svg)](https://github.com/Gxo3000/DickGrowerBot/actions/workflows/serverless.yaml)
 
-A game bot for group chats that let its users grow their virtual "dicks" every day for some random count of centimeters (including negative values) and compete with friends and other chat members.
+A game bot for group chats that lets its users grow their virtual "dicks" every day for some random
+count of centimeters (including negative values) and compete with friends and other chat members.
 
-Additional mechanics
---------------------
-_(compared with some competitors)_
+It runs on [Telegram Serverless](https://core.telegram.org/bots/serverless): plain JavaScript modules
+in `tgcloud/`, executed by Telegram next to the Bot API and a built-in SQLite database — no server,
+no Docker, nothing to keep alive. It is a rewrite of [DickGrowerBot](https://github.com/kozalosev/DickGrowerBot)
+by kozalosev, originally written in Rust.
 
-* **The Dick of the Day** daily contest to grow a randomly chosen dick for a bit more.
-* A way to play the game without the necessity to add the bot into a group (via inline queries with a callback button).
-* Import from _@pipisabot_ and _@kraft28_bot_ (not tested! help of its users is required).
-* PvP fights with statistics.
+Mechanics
+---------
 
-### Soon (but not very, I guess)
-* an option to show mercy and return the award for the battle back;
-* support for those who loses battles the most;
-* more perks;
-* achievements;
-* referral promo codes;
-* global monthly events;
-* a shop.
+* `/grow` once a day in every chat, with a grace period of growth only for newcomers;
+* `/top` of the chat, page by page;
+* **the Dick of the Day** (`/dod`), a daily election that brings the winner some bonus centimeters;
+* `/pvp` battles with bets and statistics;
+* `/loan` for those deep below zero, paid off by the following growths;
+* a bonus for playing on days in a row;
+* the daily shrink of dicks nobody has grown for a week, and `/shrinks` to see who lost what;
+* promo codes (`/promo`, and a `/start` deeplink);
+* `/import` from _@pipisabot_ and _@kraft28_bot_;
+* the inline mode, to play in a chat without adding the bot to it;
+* `/topics` to confine the bot to chosen forum topics;
+* `/language` per user and per chat: English, Russian, Italian, Persian, Chinese (Simplified and
+  Traditional);
+* `/support` to reach the owner, a rate limit against floods, and bans.
 
-Features
---------
-* true system random from the environment's chaos by usage of the `get_random()` syscall (`BCryptGenRandom` on Windows, or other alternatives on different OSes);
-* localizations for English, Russian, Italian, Persian, and Chinese (Simplified & Traditional), switchable per chat via `/language` — and per user too when the optional [user-service](#user-service-integration) is enabled;
-* Prometheus-like metrics, including per-function request/error/latency metrics via [autometrics](https://autometrics.dev);
-* OpenTelemetry distributed tracing (OTLP/gRPC), exportable to a collector such as Jaeger;
-* `/support` to reach the owner without exposing an email or a personal account, and SQL functions to
-  answer a data deletion request by hand — see [Support requests and data deletion](https://github.com/kozalosev/DickGrowerBot/wiki/Support-requests-and-data-deletion) in the wiki;
-* can be restricted for use in specific topics only;
-* optional self-destruction of the bot's own messages (and of the commands behind them, where the
-  bot is an administrator) to keep a busy chat readable — configured per message group with the
-  `MSG_SELFDESTRUCT_*` variables of [.env.example](.env.example), and by each chat's administrators
-  for their own chat with `/cleanup`, which offers them a choice of delays per message group.
+Running it
+----------
 
-Technical stuff
----------------
-
-### Requirements to run
-* PostgreSQL;
-* _\[optional]_ Docker (it makes the configuration a lot easier);
-* _\[optional]_ [Task](https://taskfile.dev) to start everything with a single command (see _Running locally_ below);
-* _\[optional]_ the [user-service](https://github.com/Kozalo-Blog/user-service) microservice for cross-bot user languages (see _user-service integration_ below);
-* _\[for webhook mode]_ a frontal proxy server with TLS support ([nginx-proxy](https://github.com/nginx-proxy/nginx-proxy), for example).
-
-### How to build the application?
-
-`cargo build`/`cargo check` type-check SQL queries at compile time via `sqlx`. Unless
-you're relying on the offline query cache (see below), this means your local database
-schema must already match `migrations/` — `sqlx::migrate!` only applies migrations
-automatically when the bot itself starts, not at build time. If a build fails with
-confusing SQL-query type-mismatch errors after pulling or adding a migration, apply
-pending migrations first (requires `sqlx-cli`, `cargo install sqlx-cli`):
+You need Node.js 22.5 or newer and a bot with Serverless switched on in
+[@BotFather](https://t.me/BotFather) (your bot → Serverless).
 
 ```shell
-cargo sqlx migrate run
+npm install
+npm test                  # offline, against an emulator of the platform
+npx tgcloud login         # the CLI access token from @BotFather → your bot → Serverless → CLI Access
+npx tgcloud push          # deploy tgcloud/
+npx tgcloud migrate       # create the tables; a push never touches the database
 ```
 
-### Running locally
+In CI, or anywhere `login` can't prompt, the CLI reads the token from the `TGCLOUD_TOKEN` variable.
 
-The usual dev setup runs the **infrastructure in Docker** (PostgreSQL, and optionally the
-`user-service`) while you run the **bot itself as a local binary**. `docker-compose.override.yml`
-forwards the containers' ports to `localhost`, so the binary reaches PostgreSQL at
-`localhost:5432` and the user-service at `localhost:${USER_SERVICE_GRPC_PORT}`.
+Settings live in [tgcloud/lib/config.js](tgcloud/lib/config.js) — the platform has no environment
+variables. Put your Telegram user id into `admins` to get the owner's commands in a private chat:
 
-Copy the example config first: `cp .env.example .env` (then fill in `TELOXIDE_TOKEN`).
+| Command | What it does |
+|---|---|
+| `/sync_commands` | fills the command menus in every language; send it once after the first deploy |
+| `/promo_add code bonus capacity [days]` | creates a promo code |
+| `/promo_list` | lists the promo codes |
+| `/ban uid days`, `/unban uid` | bans a player and lifts the ban |
 
-With [Task](https://taskfile.dev) installed, one command brings the infra up, migrates the
-database and starts the bot:
+How it is built is described in [AGENTS.md](AGENTS.md), and the platform's SDK in
+[docs/tgcloud-sdk.md](docs/tgcloud-sdk.md).
 
-```shell
-task run
-```
+License
+-------
 
-| Task | What it does |
-|------|--------------|
-| `task infra` | Start the full infra — PostgreSQL + user-service — in Docker (ports forwarded to `localhost`); alias for `task infra:full` |
-| `task infra:min` | Start only PostgreSQL (no user-service) |
-| `task run` | `task infra`, apply migrations, then run the bot with `cargo run` |
-| `task migrate` | Apply pending DB migrations (`cargo sqlx migrate run`) |
-| `task up` | Build and start the **whole** stack (bot included) in Docker |
-| `task down` | Stop and remove the Docker stack |
-| `task infra:down` | Stop just the infra containers |
-
-Without Task, the equivalent of `task run` is:
-
-```shell
-docker compose up -d --wait postgres user-service
-cargo sqlx migrate run
-cargo run
-```
-
-`docker-compose.override.yml` is loaded automatically by any `docker compose` command; it's
-what forwards the container ports to `localhost` for the local binary. `task up`/`down` opt
-out of it (via `-f docker-compose.yml`) to run the whole stack in Docker — but note that
-running the **bot inside Docker** needs a Docker-oriented `.env` (`POSTGRES_HOST=postgres`,
-and `GRPC_ADDR_USER_SERVICE=user-service:${USER_SERVICE_GRPC_PORT}` if the integration is on),
-which is the opposite of the `localhost` values `.env.example` ships for the local-binary flow.
-
-### Tracing / observability
-
-The bot logs and traces through [`tracing`](https://docs.rs/tracing), with structured fields: a log
-message is a constant and the values around it (`chat_id`, `uid`, `error`, …) are separate fields,
-so the log database can filter and count them instead of matching text. `RUST_LOG` controls the
-verbosity, of both the console and the export.
-
-Console output is always on — it is the fallback when the observability stack is not configured or
-cannot be reached. Two more variables send the data to that stack, each optional and independent:
-
-* `OTEL_EXPORTER_OTLP_ENDPOINT` — the **spans**, over OTLP/gRPC;
-* `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` — the **log records**, over OTLP/HTTP (the full URL, path
-  included). The exported records carry the trace and span ids of the span they were written in, put
-  there by the SDK, so a log line and a trace can be matched.
-
-How many spans are produced and kept is tunable too; the settings are described in `.env.example`.
-
-`docker-compose.yml` bundles an **optional** observability stack, gated behind the `tracing` Compose
-profile: [Jaeger](https://www.jaegertracing.io/) all-in-one for the spans and
-[VictoriaLogs](https://docs.victoriametrics.com/victorialogs/) for the records. The
-`task infra`/`infra:full` tasks start both automatically (they name them, which activates the
-profile), and `docker-compose.override.yml` forwards their ports to `localhost` — so in the
-local-binary dev flow the Jaeger UI is at [`http://localhost:16686`](http://localhost:16686), OTLP
-at `localhost:4317`, and the VictoriaLogs UI at
-[`http://localhost:9428/select/vmui/`](http://localhost:9428/select/vmui/). For the
-full-stack-in-Docker flow (`task up`, which skips the override), enable it with
-`COMPOSE_PROFILES=tracing`; there they stay on the Compose network and the in-Docker bot reaches
-them at `jaeger:4317` and `victoria-logs:9428`. Set the two variables accordingly — see
-`.env.example`, which ships both forms commented out.
-
-The trace of an update is rooted at the handler that processes it, not at the HTTP request that
-brought it in: the webhook handler only parses the update and hands it to the dispatcher, so an HTTP
-span would be empty. Outbound user-service (gRPC) calls are auto-instrumented, and the trace context
-propagates into the user-service.
-
-Independently of tracing, the `/metrics` endpoint (port `8080`) exposes Prometheus metrics: HTTP
-metrics from `axum-prometheus`, the bot's own domain counters, and per-function request/error/latency
-metrics generated by [autometrics](https://autometrics.dev) on the handlers and repository methods.
-
-Every call the bot makes *to* the Telegram Bot API is measured as well:
-`telegram_request_duration_seconds{method,outcome}` records how long it took (the failed ones
-included, so a timeout doesn't go missing), it gets a client span of its own in the trace, and a
-request the API rejects without a proper error code is logged together with the payload that caused
-it.
-
-### The cache
-
-Everything the bot keeps briefly — cached settings, locks, unfinished dialogues — lives in one
-store instead of a map per feature. Almost nothing there is a source of truth, so a store that is
-down, slow or absent costs only the work it would have saved: the bot starts and runs either way.
-
-Without `REDIS_HOST` the values stay in the process, which is all a single instance needs and not a
-degraded mode. A server adds a dialogue that survives a restart, and correctness once there is more
-than one instance, for a round trip on each miss. The container runs [Valkey](https://valkey.io),
-the BSD-licensed fork; the protocol is Redis, which the variables are named after, and
-`.env.example` describes them.
-
-### [user-service](https://github.com/Kozalo-Blog/user-service) integration
-
-user-service is a small gRPC microservice that stores a user's preferred interface language
-and shares it across all of SadBot.Dev's bots. When enabled, the bot offers a personal
-`/language` command in private chats and honours each user's saved language. When **disabled**,
-languages come from Telegram as before and `/language` is hidden from private chats — the
-chat-wide `/language` for group admins keeps working regardless, since it's stored in the
-bot's own database.
-
-`docker-compose.yml` bundles the `user-service` container, gated behind the `user-service` Compose
-profile — the `task infra`/`infra:full` tasks start it automatically (they name it, which activates
-its profile), while a bare `docker compose up` / `task up` starts it only when
-`COMPOSE_PROFILES=user-service` is set. It shares the bot's PostgreSQL server but uses its own
-`userservicedb` database, provisioned by `postgres/init-user-service-db.sh` (which only runs on a
-**fresh** data volume — on an existing `./data`, create the database once by hand; the script's
-header shows the command).
-
-Enable the integration by setting `GRPC_ADDR_USER_SERVICE` in `.env`, choosing the host by
-where the **bot** runs:
-
-* **bot as a local binary** (infra in Docker): `GRPC_ADDR_USER_SERVICE=localhost:${USER_SERVICE_GRPC_PORT}`;
-* **bot inside docker-compose**: `GRPC_ADDR_USER_SERVICE=user-service:${USER_SERVICE_GRPC_PORT}`.
-
-See the `user-service` block in `.env.example` for the related variables (cache TTLs, gRPC
-timeout, and the service's database credentials).
-
-### How to rebuild .sqlx queries?
-_(to build the application without a running RDBMS)_
-
-```shell
-cargo sqlx prepare -- --tests
-```
-
-### Adjustment hints
-
-It's most probably you want to change the value of the `GROW_SHRINK_RATIO` environment variable to make the players upset and disappointed more or less often.
-
-The reward for playing on days in a row is tunable too; the settings are described in `.env.example`.
-
-### How to disable a command?
-
-Most of the command can be hidden from both lists: command hints and inline results. To do so, specify an environment variable like `DISABLE_CMD_STATS` (where `STATS` is a command key) with any value.
-Don't forget to pass this variable to the container by adding it to the `docker-compose.yml` file!
+MIT with the "Commons Clause" condition, see [LICENSE](LICENSE): the code may not be used to create
+competitor bots or for any commercial profit.

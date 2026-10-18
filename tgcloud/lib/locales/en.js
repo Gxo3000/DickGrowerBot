@@ -212,7 +212,7 @@ export default {
       promo_line: '<code>%{code}</code>: %{bonus} cm, %{capacity} left, %{since} — %{until}',
       promo_none: 'There are no promo codes yet.',
       forever: 'forever',
-      commands_synced: 'The command menu is updated: %{count} lists.',
+      commands_synced: 'The command menus and the descriptions are updated: %{count} requests.',
       invalid: 'Invalid arguments.',
     },
   },
@@ -289,5 +289,9 @@ export default {
   privacy: {
     text: 'Here is what I store, and why:\n\n1️⃣ Your Telegram ID and name — to show the top and the results of battles;\n2️⃣ The date I first saw you — newcomers get a grace period of growth without shrinks;\n3️⃣ The IDs of chats — so that every chat has its dicks of its own, both via commands and inline mode;\n4️⃣ Per chat: the lengths, the time of the last growth, loans, the statistics of battles and the streak of days in a row;\n5️⃣ A log of the Dick of the Day winners, the imports from other bots, the promo code activations and the shrinks;\n6️⃣ The interface language, if you choose one with /language.\n\nThe data is kept in the bot\'s database on Telegram Serverless, Telegram\'s own infrastructure, and is not given to anybody else. The whole schema is published with the source code: %{repo}',
     contacts_support: 'To have your data deleted or to get a copy of it, write via /support.',
+  },
+  bot: {
+    description: '🍆 Who has the biggest one in the chat? Add me to a group and /grow your dick once a day, climb the /top, become the Dick of the Day, fight your friends with /pvp bets and keep a streak of days in a row. I work in inline mode too: type my username in any chat.',
+    short_description: 'A game for group chats: grow your dick every day, climb the top and fight your friends.',
   },
 };

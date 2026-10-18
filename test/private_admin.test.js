@@ -68,15 +68,42 @@ test('a ban stops the game but not the help, and is lifted', async () => {
   assert.match(lastText(), /already played with your dick today/);
 });
 
-test('the owner syncs the command menus; somebody else can not', async () => {
+test('the owner syncs the command menus and the descriptions; somebody else can not', async () => {
   await handleMessage(pm(ALICE, '/sync_commands'));
   assert.equal(apiCalls('setMyCommands').length, 0);
-  assert.match(await adminSays('/sync_commands'), /18 lists/);
-  const group = apiCalls('setMyCommands').find((c) => c.params.scope.type === 'all_group_chats' && c.params.language_code === 'ru');
-  assert.ok(group.params.commands.some((c) => c.command === 'grow' && c.description === 'Вырасти пиписю!'));
-  const admins = apiCalls('setMyCommands').find((c) => c.params.scope.type === 'all_chat_administrators' && !c.params.language_code);
-  assert.ok(admins.params.commands.some((c) => c.command === 'topics'));
-  assert.ok(admins.params.commands.some((c) => c.command === 'grow'));
+  assert.match(await adminSays('/sync_commands'), /30 requests/);
+
+  const menu = (scope, language) => apiCalls('setMyCommands')
+    .find((c) => c.params.scope.type === scope && c.params.language_code === language)
+    .params.commands;
+  const russianGroup = menu('all_group_chats', 'ru');
+  assert.ok(russianGroup.some((c) => c.command === 'grow' && c.description === 'Вырасти пиписю!'));
+  const admins = menu('all_chat_administrators', undefined).map((c) => c.command);
+  assert.ok(admins.includes('topics') && admins.includes('grow'));
+  const privates = menu('all_private_chats', undefined).map((c) => c.command);
+  assert.deepEqual(privates, ['stats', 'promo', 'language', 'help', 'privacy']);
+  const group = menu('all_group_chats', undefined).map((c) => c.command);
+  assert.deepEqual(group, ['grow', 'top', 'dod', 'pvp', 'loan', 'shrinks', 'stats', 'help']);
+
+  const russian = apiCalls('setMyDescription').find((c) => c.params.language_code === 'ru').params.description;
+  assert.match(russian, /^🍆 У кого самая большая в чате\?/);
+  assert.equal(apiCalls('setMyShortDescription').length, 6);
+});
+
+test('every menu command and description is translated and fits Telegram limits', async () => {
+  await adminSays('/sync_commands');
+  for (const { params } of apiCalls('setMyCommands')) {
+    for (const { command, description } of params.commands) {
+      assert.ok(!description.startsWith('commands.'), `${command} has no description in ${params.language_code}`);
+      assert.ok(description.length <= 256, `${command} is too long in ${params.language_code}`);
+    }
+  }
+  for (const { params } of apiCalls('setMyDescription')) {
+    assert.ok(params.description.length <= 512 && !params.description.startsWith('bot.'));
+  }
+  for (const { params } of apiCalls('setMyShortDescription')) {
+    assert.ok(params.short_description.length <= 120 && !params.short_description.startsWith('bot.'));
+  }
 });
 
 test('game commands in a private chat and plain private texts get the group notice', async () => {

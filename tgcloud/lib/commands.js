@@ -4,24 +4,24 @@ import { t } from './i18n.js';
 import { shrinkEnabled } from './features/shrink.js';
 import { supportEnabled } from './features/support.js';
 
-// Every command the bot answers. `scope` says where it works; `menu` lists the Bot API menus it
-// is shown in; `key` names its description, `commands.<key>.description`.
+// Every command the bot answers, in the order the menus show them. `scope` says where it works;
+// `menu` lists the Bot API menus it is shown in, described by `commands.<name>.description`.
 export const COMMANDS = [
   { name: 'start', scope: 'any', menu: [], allowBanned: true },
-  { name: 'help', scope: 'any', menu: ['private', 'group'], allowBanned: true },
-  { name: 'privacy', scope: 'any', menu: ['private'], allowBanned: true },
-  { name: 'support', scope: 'private', menu: ['private'], allowBanned: true, available: supportEnabled },
-  { name: 'promo', scope: 'private', menu: ['private'] },
-  { name: 'stats', scope: 'any', menu: ['private', 'group'] },
-  { name: 'language', scope: 'any', menu: ['private', 'admin'] },
   { name: 'grow', scope: 'group', menu: ['group'] },
   { name: 'top', scope: 'group', menu: ['group'] },
   { name: 'dod', aliases: ['dick_of_day'], scope: 'group', menu: ['group'] },
   { name: 'pvp', aliases: ['battle', 'attack', 'fight'], scope: 'group', menu: ['group'] },
   { name: 'loan', aliases: ['borrow'], scope: 'group', menu: ['group'] },
   { name: 'shrinks', scope: 'group', menu: ['group'], available: shrinkEnabled },
+  { name: 'stats', scope: 'any', menu: ['private', 'group'] },
+  { name: 'promo', scope: 'private', menu: ['private'] },
+  { name: 'language', scope: 'any', menu: ['private', 'admin'] },
   { name: 'import', scope: 'group', menu: ['admin'] },
   { name: 'topics', scope: 'group', menu: ['admin'] },
+  { name: 'support', scope: 'private', menu: ['private'], allowBanned: true, available: supportEnabled },
+  { name: 'help', scope: 'any', menu: ['private', 'group'], allowBanned: true },
+  { name: 'privacy', scope: 'any', menu: ['private'], allowBanned: true },
 ];
 
 export function findCommand(name) {
@@ -29,9 +29,10 @@ export function findCommand(name) {
   return spec && isAvailable(spec) ? spec : null;
 }
 
-// Fills the Bot API command menus for every language and for the default. Returns how many
-// lists were set.
-export async function syncCommands(languages) {
+// Fills the bot's profile for every language and for the default: the command menus of the private
+// chats, the groups and the group admins, and the descriptions shown in an empty chat and on the
+// profile page. Returns how many requests were made.
+export async function syncProfile(languages) {
   const scopes = {
     private: { type: 'all_private_chats' },
     group: { type: 'all_group_chats' },
@@ -40,16 +41,18 @@ export async function syncCommands(languages) {
   let count = 0;
   for (const language of [null, ...languages]) {
     const lang = language ?? 'en';
+    const languageCode = language ? { language_code: language } : {};
     for (const [menu, scope] of Object.entries(scopes)) {
       const commands = COMMANDS
         .filter((spec) => isAvailable(spec))
         .filter((spec) => spec.menu.includes(menu) || (menu === 'admin' && spec.menu.includes('group')))
         .map((spec) => ({ command: spec.name, description: t(lang, `commands.${spec.name}.description`) }));
-      const params = { commands, scope };
-      if (language) params.language_code = language;
-      await api.setMyCommands(params);
+      await api.setMyCommands({ commands, scope, ...languageCode });
       count++;
     }
+    await api.setMyDescription({ description: t(lang, 'bot.description'), ...languageCode });
+    await api.setMyShortDescription({ short_description: t(lang, 'bot.short_description'), ...languageCode });
+    count += 2;
   }
   return count;
 }

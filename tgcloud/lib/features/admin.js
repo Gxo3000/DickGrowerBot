@@ -5,7 +5,7 @@ import { DAY_SECONDS, formatDate, formatDay, nowSec } from '../time.js';
 import { ban, unban } from '../repo/users.js';
 import { createCode, listCodes } from '../repo/promo.js';
 import { isPromoCode } from './promo.js';
-import { syncCommands } from '../commands.js';
+import { syncProfile } from '../commands.js';
 
 export const ADMIN_COMMANDS = ['admin', 'ban', 'unban', 'promo_add', 'promo_list', 'sync_commands'];
 
@@ -47,7 +47,7 @@ export async function adminCommand(name, args, lang) {
       return codes.map((row) => t(lang, 'commands.admin.promo_line', describe(row, lang))).join('\n');
     }
     case 'sync_commands': {
-      const count = await syncCommands(LANGUAGES);
+      const count = await syncProfile(LANGUAGES);
       return t(lang, 'commands.admin.commands_synced', { count });
     }
     default:

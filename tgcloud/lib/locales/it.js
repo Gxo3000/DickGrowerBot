@@ -278,4 +278,8 @@ export default {
     text: 'Ecco cosa conservo e perché:\n\n1️⃣ Il tuo ID Telegram e il tuo nome — per mostrare la classifica e i risultati delle battaglie;\n2️⃣ La data in cui ti ho visto per la prima volta — i nuovi arrivati hanno un periodo di crescita senza accorciamenti;\n3️⃣ Gli ID delle chat — perché ogni chat abbia i suoi piselli, sia con i comandi sia in modalità inline;\n4️⃣ Per ogni chat: le lunghezze, l\'ora dell\'ultima crescita, i prestiti, le statistiche delle battaglie e la serie di giorni consecutivi;\n5️⃣ Un registro dei vincitori del Pisello del Giorno, delle importazioni da altri bot, delle attivazioni dei codici promozionali e degli accorciamenti;\n6️⃣ La lingua dell\'interfaccia, se ne scegli una con /language.\n\nI dati sono conservati nel database del bot su Telegram Serverless, l\'infrastruttura di Telegram stessa, e non vengono dati a nessun altro. L\'intero schema è pubblicato insieme al codice sorgente: %{repo}',
     contacts_support: 'Per far cancellare i tuoi dati o averne una copia, scrivi tramite /support.',
   },
+  bot: {
+    description: '🍆 Chi ce l\'ha più grande nella chat? Aggiungimi a un gruppo e fai crescere il tuo pisello con /grow una volta al giorno, scala la /top, diventa il Pisello del Giorno, sfida gli amici con le scommesse di /pvp e mantieni la serie di giorni consecutivi. Funziono anche in modalità inline: scrivi il mio username in qualsiasi chat.',
+    short_description: 'Un gioco per le chat di gruppo: fai crescere il pisello ogni giorno, scala la classifica, sfida gli amici.',
+  },
 };

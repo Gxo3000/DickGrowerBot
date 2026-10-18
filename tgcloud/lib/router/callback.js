@@ -11,9 +11,6 @@ import { banNotice } from '../features/common.js';
 import { parseTopPage, top } from '../features/top.js';
 import { acceptBattle, parseBattleData } from '../features/pvp.js';
 import { answerLoan, parseLoanData } from '../features/loan.js';
-import { buyTickets, lotteryStatus, parseLotteryData } from '../features/lottery.js';
-import { bossStatus, hitBoss, parseBossData } from '../features/boss.js';
-import { goOnAdventure, parseAdventureData } from '../features/adventure.js';
 import { answerConfirmation, parsePromoData } from '../features/promo.js';
 import { answerLanguage, parseLanguageData } from '../features/language.js';
 import { answerTopics, parseTopicsData, topicAllowed } from '../features/topics.js';
@@ -28,25 +25,6 @@ const ROUTES = [
   { parse: parseTopPage, needsChat: true, run: (env, page) => top({ ...env, page }) },
   { parse: parseBattleData, needsChat: true, run: (env, data) => acceptBattle({ ...env, data }) },
   { parse: parseLoanData, needsChat: true, owned: (data) => data.uid, run: (env, data) => answerLoan({ ...env, data }) },
-  {
-    parse: parseLotteryData,
-    needsChat: true,
-    run: async (env, data) => {
-      const notice = data.action === 'buy' ? await buyTickets({ ...env, count: data.count }) : {};
-      return notice.alert ? notice : { ...notice, ...(await lotteryStatus(env)) };
-    },
-  },
-  {
-    parse: parseBossData,
-    needsChat: true,
-    run: (env, data) => (data.action === 'hit' ? hitBoss({ ...env, bossId: data.bossId }) : bossStatus(env)),
-  },
-  {
-    parse: parseAdventureData,
-    needsChat: true,
-    owned: (data) => data.uid,
-    run: (env, data) => goOnAdventure({ ...env, difficulty: data.difficulty }),
-  },
   { parse: parsePromoData, run: async (env, data) => ({ text: await answerConfirmation(env.user.uid, data, env.lang) }) },
   { parse: parseLanguageData, run: (env, data) => answerLanguage({ ...env, data }) },
   { parse: parseTopicsData, needsChat: true, run: (env, data) => answerTopics({ ...env, data }) },

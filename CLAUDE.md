@@ -5,9 +5,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # DickGrowerBot — Claude Code Guide
 
 **Two bots live in this repository.** Everything below is about the Rust bot (`src/`, Postgres,
-Docker). The JavaScript rewrite for Telegram Serverless, with the PvE games and the lottery, lives in
-`tgcloud/` and is described in [AGENTS.md](AGENTS.md); it shares no code and no database with the
-Rust bot, and `npm test` is its test suite.
+Docker). The JavaScript rewrite for Telegram Serverless lives in `tgcloud/` and is described in
+[AGENTS.md](AGENTS.md); it shares no code and no database with the Rust bot, and `npm test` is its
+test suite.
 
 ## Build & Run
 

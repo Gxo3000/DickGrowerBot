@@ -117,7 +117,6 @@ export default {
       streak: '连续天数: <b>%{current}</b>\n最长连续增长次数: <b>%{max}</b>',
       pvp: '胜率: <b>%{win_rate}</b>。\n战斗次数: <b>%{battles}</b>。\n胜利次数: <b>%{wins}</b>。\n最大连胜: <b>%{win_streak}</b>。\n获得长度: <b>%{acquired} 厘米</b>。\n失去长度: <b>%{lost} 厘米</b>。',
       personal: '<i>你的个人统计:</i>\n— 你参与的游戏聊天数量: <b>%{chats}</b>。\n— 最大长度: <b>%{max_length}</b>。\n— 所有聊天中的丁丁总长度: <b>%{total_length}</b>。',
-      pve: '冒险：<b>%{adventures}</b> 次，胜利 <b>%{won}</b> 次。\n对首领的伤害：<b>%{damage}</b>，最后一击：<b>%{kills}</b> 次。\nPvE 收益：<b>%{earned} 厘米</b>。',
     },
     loan: {
       description: '负数？申请贷款！',
@@ -204,77 +203,6 @@ export default {
     shrinks: {
       description: '最近谁缩短了',
     },
-    lottery: {
-      description: '每日厘米彩票',
-      status: '🎰 <b>今日彩票</b>\n\n奖池：<b>%{pool} 厘米</b>，加上机器人的奖励共 <b>%{prize} 厘米</b>。\n已售彩票：<b>%{tickets}</b>，玩家：<b>%{players}</b>。\n你的彩票：<b>%{mine}</b> / %{max}。\n\n每张彩票 <b>%{price} 厘米</b>。彩票越多，机会越大。UTC 午夜后开奖，还剩 <b>%{hours}</b> 小时 <b>%{minutes}</b> 分钟。',
-      last_won: '上一期：<b>%{name}</b> 赢得了 <b>%{prize} 厘米</b>。',
-      last_refunded: '上一期因玩家不足而取消，彩票已退款。',
-      buttons: {
-        buy: '🎟 购买 ×%{count}（%{cost} 厘米）',
-        refresh: '🔄 刷新',
-      },
-      bought: '你买了 %{count} 张彩票，现在共有 %{mine} 张。',
-      errors: {
-        not_enough: '你的丁丁太短了：需要 %{cost} 厘米。',
-        limit: '每天最多只能买 %{max} 张彩票。',
-        no_dick: '先用 /grow 让你的丁丁长起来！',
-      },
-      draw: {
-        won: '🎰 <b>%{date} 的彩票已开奖！</b>\n\n获胜者是 <b>%{name}</b>，持有 %{total} 张中的 %{tickets} 张。<b>%{prize} 厘米</b> 的奖品归他所有，现在他的丁丁长 <b>%{length} 厘米</b>。',
-        refunded: '🎰 %{date} 的彩票已取消：至少需要 %{min} 名玩家。所有人的厘米都已退回。',
-      },
-    },
-    boss: {
-      description: '团队首领：和全群一起打败它',
-      kinds: {
-        shrinker: '✂️ 伟大的缩短者',
-        frost: '🥶 冰霜巨人',
-        vacuum: '🌀 虚空吸尘器',
-        crab: '🦀 钢铁螃蟹',
-        cucumber: '🥒 变异黄瓜',
-      },
-      status: '%{boss} <b>（等级 %{level}）</b>\n❤️ %{bar} <b>%{hp}/%{max_hp}</b>\n\n击败奖励：<b>%{reward} 厘米</b>，按造成的伤害分配；最后一击额外获得 <b>+%{last_hit} 厘米</b>。\n每人每 %{cooldown} 分钟可攻击一次。首领将在 <b>%{hours}</b> 小时 <b>%{minutes}</b> 分钟后逃跑。',
-      raiders_title: '参战者：',
-      raider_line: '%{n}. <b>%{name}</b> — %{damage}',
-      buttons: {
-        hit: '⚔️ 攻击！',
-        refresh: '🔄 刷新',
-      },
-      hit: '⚔️ <b>%{name}</b> 对首领造成了 <b>%{damage}</b> 点伤害。',
-      crit: '💥 暴击！',
-      counter: '首领反击了：<b>%{name}</b> 失去了 <b>%{lost} 厘米</b>。',
-      cooldown: '你正在喘口气。%{minutes} 分钟后才能再次攻击。',
-      no_dick: '先用 /grow 让你的丁丁长起来！',
-      gone: '这个首领已经不在了。',
-      defeated: '🏆 <b>%{boss}（等级 %{level}）被击败了！</b> 最后一击来自 <b>%{killer}</b>。\n\n奖励：\n%{rewards}\n\n下一个首领明天到来。',
-      reward_line: '— <b>%{name}</b>：+%{reward} 厘米（伤害 %{damage}）',
-      escaped: '💨 %{boss}（等级 %{level}）逃跑了——团队没来得及击败它。',
-      resting: '今天的首领已被击败。下一个将在 <b>%{hours}</b> 小时 <b>%{minutes}</b> 分钟后到来。',
-    },
-    adventure: {
-      description: '冒险：每天独自挑战一只怪物',
-      choose: '🗺 <b>%{name}</b>，今天去哪儿？\n\n🟢 <b>简单</b> — 胜率 %{easy_chance}：+%{easy_reward} 或 −%{easy_penalty} 厘米\n🟡 <b>普通</b> — %{medium_chance}：+%{medium_reward} 或 −%{medium_penalty} 厘米\n🔴 <b>困难</b> — %{hard_chance}：+%{hard_reward} 或 −%{hard_penalty} 厘米，战利品中可能还有一次额外的 /grow',
-      buttons: {
-        easy: '🟢 简单',
-        medium: '🟡 普通',
-        hard: '🔴 困难',
-      },
-      difficulty: {
-        easy: '一次简单的',
-        medium: '一次普通的',
-        hard: '一次困难的',
-      },
-      monsters: {
-        easy: ['一只野鼠', '一个瞌睡的哥布林', '一只愤怒的鹅', '一团史莱姆'],
-        medium: ['一个沼泽巨魔', '一个兽人掠夺者', '一只巨型蜘蛛', '一个狼人'],
-        hard: ['一条龙', '一个巫妖', '一只克拉肯', '黄瓜之王'],
-      },
-      won: '⚔️ <b>%{name}</b> 踏上了%{difficulty}冒险，打败了%{monster}！战利品：<b>+%{reward} 厘米</b>，现在丁丁长 <b>%{length} 厘米</b>。',
-      lost: '🩸 <b>%{name}</b> 踏上了%{difficulty}冒险，但%{monster}更强。失去了 <b>%{penalty} 厘米</b>，现在丁丁长 <b>%{length} 厘米</b>。',
-      bonus_attempt: '🎁 怪物掉落了一次额外的 /grow 机会！它会一直留到你需要的时候。',
-      already: '你今天已经冒险过了。',
-      no_dick: '先用 /grow 让你的丁丁长起来！',
-    },
   },
   inline: {
     results: {
@@ -289,9 +217,6 @@ export default {
         stats: '胜利统计',
         loan: '负数？申请贷款！',
         shrinks: '查看最近的缩水',
-        lottery: '今日彩票',
-        boss: '团队首领',
-        adventure: '去冒险',
       },
     },
     callback: {
@@ -341,9 +266,6 @@ export default {
     shrink: '%{days} 天没有长大的丁丁每天都会缩短一点，群里会知道谁损失了多少。/shrinks 会再次显示。',
     dod: '此外，每个群每天都可以用 /dod 选出<i>今日之屌</i>。这个称号会给它的主人额外的厘米奖励。只有在过去一周内至少长过一次黄瓜的活跃玩家才能参加评选。',
     pvp: '如果你想让你的小兄弟变得更长并且愿意为此冒险，就和朋友们战斗吧。只需用 /pvp 命令下注！胜者获得指定的厘米数，败者失去相同的数量。就这么简单。',
-    adventure: '⚔️ <b>PvE。</b> 每天可以进行一次 /adventure：选择简单、普通或困难的怪物。越难，战利品越多——可能失去的也越多。',
-    boss: '和全群一起挑战团队首领——/boss。每人每 %{cooldown} 分钟可以攻击一次，丁丁越长攻击越强，但首领会反击。首领倒下时，奖励按造成的伤害分配，最后一击还有额外奖励。%{lifetime} 天内没被击败的首领会逃跑。',
-    lottery: '🎰 <b>彩票。</b> 每个群每天都有 /lottery：每张彩票 <b>%{price} 厘米</b>，每天最多 %{max} 张。UTC 午夜后开奖——彩票越多，机会越大——获胜者拿走整个奖池，外加机器人 %{bonus} 的奖励。玩家少于 %{min} 人时彩票退款。',
     promo: '在私聊中用 /promo 命令激活兑换码，获得额外的厘米。',
     import: '<b>等等，我已经在 Telegram 里玩过类似的机器人，在那里我的可大了……</b>\n\n任何群管理员都可以用 /import 命令回复另一个机器人展示排行榜的消息，导入已有的丁丁。目前支持以下机器人：%{bots}。\n\n要成功导入，玩家必须已经在这个机器人里有丁丁！两个长度会相加，所以不会失去任何进度。此外，必须临时授予机器人管理员权限，它才能读取另一个机器人的消息。',
     inline: '<b>群管理员不允许添加陌生的机器人？</b>\n\n不把机器人加进群也能玩！使用内联查询：在 <code>@</code> 符号后输入机器人的用户名和一个空格，就能看到同样的命令！',
@@ -353,7 +275,7 @@ export default {
     contacts_support: '如果遇到任何问题，请用 /support 命令给我的主人发消息。',
   },
   privacy: {
-    text: '以下是我保存的内容及原因：\n\n1️⃣ 你的 Telegram ID 和名字——用于显示排行榜以及战斗、团队战和彩票的结果；\n2️⃣ 我第一次见到你的日期——新玩家有一段只增长不缩短的宽限期；\n3️⃣ 群组的 ID——让每个群都有自己的丁丁，无论是通过命令还是内联模式；\n4️⃣ 每个群的：长度、上次增长的时间、贷款、战斗和 PvE 统计、彩票以及连续天数；\n5️⃣ 今日之屌获胜者、从其他机器人的导入、兑换码激活和缩短的记录；\n6️⃣ 界面语言，如果你用 /language 选择了的话。\n\n数据保存在机器人位于 Telegram Serverless（Telegram 自己的基础设施）上的数据库中，不会提供给任何其他人。完整的数据库结构与源代码一起公开：%{repo}',
+    text: '以下是我保存的内容及原因：\n\n1️⃣ 你的 Telegram ID 和名字——用于显示排行榜以及战斗的结果；\n2️⃣ 我第一次见到你的日期——新玩家有一段只增长不缩短的宽限期；\n3️⃣ 群组的 ID——让每个群都有自己的丁丁，无论是通过命令还是内联模式；\n4️⃣ 每个群的：长度、上次增长的时间、贷款、战斗统计以及连续天数；\n5️⃣ 今日之屌获胜者、从其他机器人的导入、兑换码激活和缩短的记录；\n6️⃣ 界面语言，如果你用 /language 选择了的话。\n\n数据保存在机器人位于 Telegram Serverless（Telegram 自己的基础设施）上的数据库中，不会提供给任何其他人。完整的数据库结构与源代码一起公开：%{repo}',
     contacts_support: '如需删除你的数据或获取一份副本，请通过 /support 联系。',
   },
 };

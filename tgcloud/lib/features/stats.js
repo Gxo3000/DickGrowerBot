@@ -4,7 +4,6 @@ import { percentage } from '../html.js';
 import { getDick, personalStats, positionOf } from '../repo/dicks.js';
 import { getBattleStats } from '../repo/battles.js';
 import { readPerkStates } from '../repo/perks.js';
-import { getPveStats } from '../repo/pve.js';
 import { streakLine } from './increment.js';
 
 export async function chatStats({ chat, user, lang }) {
@@ -25,15 +24,6 @@ export async function chatStats({ chat, user, lang }) {
       lost: battles.lost_length,
     }));
   }
-
-  const pve = await getPveStats(user.uid, chat.id);
-  parts.push(t(lang, 'commands.stats.pve', {
-    adventures: pve.adventures,
-    won: pve.adventures_won,
-    damage: pve.boss_damage,
-    kills: pve.boss_kills,
-    earned: pve.earned,
-  }));
   return { text: parts.join('\n\n') };
 }
 

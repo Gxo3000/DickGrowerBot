@@ -73,7 +73,7 @@ test('the owner syncs the command menus; somebody else can not', async () => {
   assert.equal(apiCalls('setMyCommands').length, 0);
   assert.match(await adminSays('/sync_commands'), /18 lists/);
   const group = apiCalls('setMyCommands').find((c) => c.params.scope.type === 'all_group_chats' && c.params.language_code === 'ru');
-  assert.ok(group.params.commands.some((c) => c.command === 'boss' && c.description === 'Рейд-босс: побей его всем чатом'));
+  assert.ok(group.params.commands.some((c) => c.command === 'grow' && c.description === 'Вырасти пиписю!'));
   const admins = apiCalls('setMyCommands').find((c) => c.params.scope.type === 'all_chat_administrators' && !c.params.language_code);
   assert.ok(admins.params.commands.some((c) => c.command === 'topics'));
   assert.ok(admins.params.commands.some((c) => c.command === 'grow'));
@@ -154,10 +154,10 @@ test('the rate limit answers the first excess requests and then drops them', asy
   assert.match(texts[2], /Too many requests/);
 });
 
-test('the help lists the new games', async () => {
+test('the help lists the games', async () => {
   await handleMessage(message(ALICE, '/help'));
   const text = lastText();
-  for (const fragment of ['/adventure', '/boss', '/lottery', '/loan', 'Telegram Serverless']) {
+  for (const fragment of ['/grow', '/top', '/dod', '/pvp', '/loan', '/promo', 'Telegram Serverless']) {
     assert.ok(text.includes(fragment), `the help mentions ${fragment}`);
   }
   assert.ok(text.length < 4096, `the help fits a message: ${text.length}`);

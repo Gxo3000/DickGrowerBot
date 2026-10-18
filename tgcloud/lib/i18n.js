@@ -46,11 +46,6 @@ export function t(lang, key, params = {}) {
   return value.replace(/%\{(\w+)\}/g, (match, name) => (name in params ? String(params[name]) : match));
 }
 
-export function list(lang, key) {
-  const value = lookup(lang, key);
-  return Array.isArray(value) ? value : [];
-}
-
 // Russian has three forms of "day"; the other locales don't use the parameter.
 export function daysWordRu(n) {
   const lastTwo = n % 100;

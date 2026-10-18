@@ -31,25 +31,12 @@ export async function addLength(uid, chatId, change) {
   return result.rows[0]?.length ?? null;
 }
 
-// Takes `cost` away only if the dick is at least that long. Returns the new length or null.
-export async function spendLength(uid, chatId, cost) {
-  const result = await db.run(sql`
-    UPDATE dicks SET length = length - ${cost}
-    WHERE uid = ${uid} AND chat_id = ${chatId} AND length >= ${cost}
-    RETURNING length`);
-  return result.rows[0]?.length ?? null;
-}
-
 // Sets the length from `expected` to `value`, unless it has changed meanwhile.
 export async function compareAndSetLength(uid, chatId, expected, value) {
   const result = await db.run(sql`
     UPDATE dicks SET length = ${value} WHERE uid = ${uid} AND chat_id = ${chatId} AND length = ${expected}
     RETURNING length`);
   return result.rows.length > 0;
-}
-
-export async function grantBonusAttempt(uid, chatId) {
-  await db.run(sql`UPDATE dicks SET bonus_attempts = bonus_attempts + 1 WHERE uid = ${uid} AND chat_id = ${chatId}`);
 }
 
 export async function positionOf(uid, chatId) {

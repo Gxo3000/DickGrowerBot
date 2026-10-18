@@ -14,25 +14,7 @@ export function helpText(lang) {
     const days = config.shrink.inactivityDays;
     paragraphs.push(t(lang, 'help.shrink', { days, word_days: daysWordRu(days) }));
   }
-  paragraphs.push(t(lang, 'help.dod'), t(lang, 'help.pvp'));
-  if (commandEnabled('adventure')) {
-    paragraphs.push(t(lang, 'help.adventure'));
-  }
-  if (commandEnabled('boss')) {
-    const lifetime = config.boss.lifetimeDays;
-    paragraphs.push(t(lang, 'help.boss', {
-      cooldown: config.boss.hitCooldownMinutes, lifetime, word_lifetime: daysWordRu(lifetime),
-    }));
-  }
-  if (commandEnabled('lottery')) {
-    paragraphs.push(t(lang, 'help.lottery', {
-      price: config.lottery.ticketPrice,
-      max: config.lottery.maxTicketsPerDay,
-      bonus: `${Math.round(config.lottery.jackpotBonusRatio * 100)}%`,
-      min: config.lottery.minParticipants,
-    }));
-  }
-  paragraphs.push(t(lang, 'help.promo'));
+  paragraphs.push(t(lang, 'help.dod'), t(lang, 'help.pvp'), t(lang, 'help.promo'));
   if (commandEnabled('import')) {
     paragraphs.push(t(lang, 'help.import', { bots: config.import.bots.map((name) => `@${name}`).join(', ') }));
   }

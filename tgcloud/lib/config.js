@@ -69,44 +69,6 @@ export const config = {
     rampUpDays: 7,
   },
 
-  lottery: {
-    ticketPrice: 5,
-    maxTicketsPerDay: 10,
-    // What the bot adds on top of the tickets sold.
-    jackpotBonusRatio: 0.2,
-    minParticipants: 2,
-  },
-
-  boss: {
-    baseHp: 120,
-    // Each level multiplies the hit points by this.
-    hpGrowth: 1.3,
-    // Every this many active players add the base hit points once more.
-    playersPerHpStep: 3,
-    hitCooldownMinutes: 60,
-    damageMin: 5,
-    damageMax: 20,
-    critChance: 0.1,
-    counterattackChance: 0.2,
-    counterattackMin: 1,
-    counterattackMax: 3,
-    // A boss that hasn't been killed in this many days escapes.
-    lifetimeDays: 2,
-    rewardBase: 10,
-    rewardPerLevel: 5,
-    lastHitBonus: 3,
-  },
-
-  adventure: {
-    difficulties: {
-      easy: { winChance: 0.7, rewardMin: 2, rewardMax: 4, penaltyMin: 1, penaltyMax: 2 },
-      medium: { winChance: 0.5, rewardMin: 4, rewardMax: 8, penaltyMin: 2, penaltyMax: 4 },
-      hard: { winChance: 0.3, rewardMin: 8, rewardMax: 15, penaltyMin: 4, penaltyMax: 7 },
-    },
-    // The chance that a won hard adventure also brings an extra /grow attempt.
-    bonusAttemptChance: 0.25,
-  },
-
   import: {
     bots: ['pipisabot', 'kraft28_bot'],
     maxMembers: 10,

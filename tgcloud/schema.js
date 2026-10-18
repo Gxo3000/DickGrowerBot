@@ -129,67 +129,6 @@ export const shrinks = table('shrinks', {
   byChatDay: index('idx_shrinks_chat_day').on(t.chatId, t.day),
 }));
 
-export const lotteries = table('lotteries', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  chatId: integer('chat_id').notNull(),
-  day: integer('day').notNull(),
-  pool: integer('pool').notNull().default(0),
-  status: text('status').notNull().default('open'),
-  winnerUid: integer('winner_uid'),
-  prize: integer('prize'),
-  finishedAt: integer('finished_at'),
-}, (t) => ({
-  byChatDay: uniqueIndex('uidx_lotteries_chat_day').on(t.chatId, t.day),
-}));
-
-export const lotteryTickets = table('lottery_tickets', {
-  lotteryId: integer('lottery_id').notNull(),
-  uid: integer('uid').notNull(),
-  tickets: integer('tickets').notNull().default(0),
-  spent: integer('spent').notNull().default(0),
-}, (t) => ({
-  pk: primaryKey({ columns: [t.lotteryId, t.uid] }),
-}));
-
-export const bosses = table('bosses', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  chatId: integer('chat_id').notNull(),
-  level: integer('level').notNull(),
-  kind: text('kind').notNull(),
-  maxHp: integer('max_hp').notNull(),
-  hp: integer('hp').notNull(),
-  status: text('status').notNull().default('alive'),
-  spawnedAt: integer('spawned_at').notNull(),
-  finishedAt: integer('finished_at'),
-  killerUid: integer('killer_uid'),
-}, (t) => ({
-  alive: uniqueIndex('uidx_bosses_alive').on(t.chatId).where(sql`status = 'alive'`),
-  byChat: index('idx_bosses_chat').on(t.chatId, t.id),
-}));
-
-export const bossHits = table('boss_hits', {
-  bossId: integer('boss_id').notNull(),
-  uid: integer('uid').notNull(),
-  damage: integer('damage').notNull().default(0),
-  hits: integer('hits').notNull().default(0),
-  lastHitAt: integer('last_hit_at').notNull().default(0),
-}, (t) => ({
-  pk: primaryKey({ columns: [t.bossId, t.uid] }),
-}));
-
-export const pveStats = table('pve_stats', {
-  uid: integer('uid').notNull(),
-  chatId: integer('chat_id').notNull(),
-  adventureDay: integer('adventure_day').notNull().default(0),
-  adventures: integer('adventures').notNull().default(0),
-  adventuresWon: integer('adventures_won').notNull().default(0),
-  bossDamage: integer('boss_damage').notNull().default(0),
-  bossKills: integer('boss_kills').notNull().default(0),
-  earned: integer('earned').notNull().default(0),
-}, (t) => ({
-  pk: primaryKey({ columns: [t.uid, t.chatId] }),
-}));
-
 export const dialogues = table('dialogues', {
   uid: integer('uid').primaryKey(),
   kind: text('kind').notNull(),

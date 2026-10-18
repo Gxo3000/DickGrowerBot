@@ -14,9 +14,6 @@ import { startBattle } from '../features/pvp.js';
 import { loan } from '../features/loan.js';
 import { chatStats, personal } from '../features/stats.js';
 import { recent } from '../features/shrink.js';
-import { lotteryStatus } from '../features/lottery.js';
-import { bossStatus } from '../features/boss.js';
-import { adventureMenu } from '../features/adventure.js';
 import { activateOrConfirm, codeFromStartParameter } from '../features/promo.js';
 import { importFromBot } from '../features/import.js';
 import { languageCommand } from '../features/language.js';
@@ -58,9 +55,6 @@ const RUN = {
     return startBattle({ ...env, bet });
   },
   loan: (env) => loan(env),
-  adventure: (env) => adventureMenu(env),
-  boss: (env) => bossStatus(env),
-  lottery: (env) => lotteryStatus(env),
   shrinks: (env) => recent(env),
   import: (env) => importFromBot(env),
   topics: (env) => topicsCommand(env),

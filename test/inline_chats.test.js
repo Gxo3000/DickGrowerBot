@@ -35,7 +35,7 @@ test('the inline mode offers the launchers, and a press plays in the chat of the
   await handleInlineQuery(inlineQuery(ALICE, ''));
   const { results } = inlineResults();
   const ids = results.map((r) => r.id);
-  for (const id of ['grow', 'top', 'dick_of_day', 'loan', 'stats', 'adventure', 'boss', 'lottery', 'pvp:1']) {
+  for (const id of ['grow', 'top', 'dick_of_day', 'loan', 'stats', 'shrinks', 'pvp:1']) {
     assert.ok(ids.includes(id), `${id} is offered`);
   }
   const grow = results.find((r) => r.id === 'grow').reply_markup.inline_keyboard[0][0].callback_data;

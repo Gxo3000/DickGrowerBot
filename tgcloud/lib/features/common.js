@@ -14,14 +14,6 @@ export function banNotice(user, lang) {
   return isBanned(user) ? t(lang, 'errors.banned', { date: formatDate(user.banned_until) }) : null;
 }
 
-// Credits a prize. Returns the new length (null when the player has no dick in the chat) and what
-// the active loan took of it.
-export async function award(uid, chatId, prize) {
-  const length = await addLength(uid, chatId, prize);
-  if (length === null) return { length: null, withheld: 0 };
-  return withholdForLoan(uid, chatId, prize, length);
-}
-
 // The active loan takes its share of a prize that is already credited, as it does of every growth.
 export async function withholdForLoan(uid, chatId, prize, length) {
   const loan = prize > 0 ? await getActiveLoan(uid, chatId) : null;

@@ -117,7 +117,6 @@ export default {
       streak: 'Giorni di fila: <b>%{current}</b>\nLa serie più lunga di crescite: <b>%{max}</b>',
       pvp: 'Tasso di vittoria: <b>%{win_rate}</b>.\nSfide: <b>%{battles}</b>.\nVittorie: <b>%{wins}</b>.\nSerie di vittorie massima: <b>%{win_streak}</b>.\nLunghezza acquisita: <b>%{acquired} cm</b>.\nLunghezza persa: <b>%{lost} cm</b>.',
       personal: '<i>Le tue statistiche personali:</i>\n— Numero di gruppi in cui giochi: <b>%{chats}</b>.\n— Lunghezza massima raggiunta: <b>%{max_length}</b>.\n— Somma dei tuoi peni in tutti i gruppi: <b>%{total_length}</b>.',
-      pve: 'Avventure: <b>%{adventures}</b>, vinte <b>%{won}</b>.\nDanni ai boss: <b>%{damage}</b>, colpi finali: <b>%{kills}</b>.\nGuadagnati nel PvE: <b>%{earned} cm</b>.',
     },
     loan: {
       description: 'Debito? Prendi un prestito!',
@@ -204,77 +203,6 @@ export default {
     shrinks: {
       description: 'Chi si è accorciato di recente',
     },
-    lottery: {
-      description: 'Lotteria giornaliera di centimetri',
-      status: '🎰 <b>Lotteria del giorno</b>\n\nIl montepremi: <b>%{pool} cm</b>, con il bonus del bot — <b>%{prize} cm</b>.\nBiglietti venduti: <b>%{tickets}</b>, giocatori: <b>%{players}</b>.\nI tuoi biglietti: <b>%{mine}</b> su %{max}.\n\nUn biglietto costa <b>%{price} cm</b>. Più biglietti hai, più alte sono le probabilità. Il vincitore sarà estratto dopo la mezzanotte UTC, tra <b>%{hours}</b>h <b>%{minutes}</b>m.',
-      last_won: 'Ultima estrazione: <b>%{name}</b> ha vinto <b>%{prize} cm</b>.',
-      last_refunded: 'L\'ultima estrazione è stata annullata per mancanza di giocatori, i biglietti sono stati rimborsati.',
-      buttons: {
-        buy: '🎟 Compra ×%{count} (%{cost} cm)',
-        refresh: '🔄 Aggiorna',
-      },
-      bought: 'Hai comprato %{count} biglietto/i. Ora ne hai %{mine}.',
-      errors: {
-        not_enough: 'Il tuo pisello è troppo corto: servono %{cost} cm.',
-        limit: 'Non puoi comprare più di %{max} biglietti al giorno.',
-        no_dick: 'Prima fai crescere il tuo pisello con /grow!',
-      },
-      draw: {
-        won: '🎰 <b>La lotteria del %{date} è stata estratta!</b>\n\nIl vincitore è <b>%{name}</b> con %{tickets} biglietto/i su %{total}. Il premio di <b>%{prize} cm</b> è suo, e ora il suo pisello è lungo <b>%{length} cm</b>.',
-        refunded: '🎰 La lotteria del %{date} è annullata: servono almeno %{min} giocatori. Tutti hanno riavuto i loro centimetri.',
-      },
-    },
-    boss: {
-      description: 'Boss del raid: sconfiggilo insieme alla chat',
-      kinds: {
-        shrinker: '✂️ Il Grande Accorciatore',
-        frost: '🥶 Il Gigante di Ghiaccio',
-        vacuum: '🌀 L\'Aspirapolvere del Vuoto',
-        crab: '🦀 Il Granchio di Ferro',
-        cucumber: '🥒 Il Cetriolo Mutante',
-      },
-      status: '%{boss} <b>(livello %{level})</b>\n❤️ %{bar} <b>%{hp}/%{max_hp}</b>\n\nRicompensa per l\'uccisione: <b>%{reward} cm</b>, divisa in base al danno inflitto; il colpo finale vale altri <b>+%{last_hit} cm</b>.\nOgnuno può colpire una volta ogni %{cooldown} min. Il boss scappa tra <b>%{hours}</b>h <b>%{minutes}</b>m.',
-      raiders_title: 'Partecipanti:',
-      raider_line: '%{n}. <b>%{name}</b> — %{damage}',
-      buttons: {
-        hit: '⚔️ Colpisci!',
-        refresh: '🔄 Aggiorna',
-      },
-      hit: '⚔️ <b>%{name}</b> ha colpito il boss per <b>%{damage}</b>.',
-      crit: '💥 Colpo critico!',
-      counter: 'Il boss ha contrattaccato: <b>%{name}</b> ha perso <b>%{lost} cm</b>.',
-      cooldown: 'Stai riprendendo fiato. Il prossimo colpo tra %{minutes} min.',
-      no_dick: 'Prima fai crescere il tuo pisello con /grow!',
-      gone: 'Questo boss non c\'è più.',
-      defeated: '🏆 <b>%{boss} (livello %{level}) è sconfitto!</b> Il colpo finale è di <b>%{killer}</b>.\n\nRicompense:\n%{rewards}\n\nIl prossimo boss arriva domani.',
-      reward_line: '— <b>%{name}</b>: +%{reward} cm (%{damage} danni)',
-      escaped: '💨 %{boss} (livello %{level}) è scappato — il raid non ha fatto in tempo.',
-      resting: 'Il boss di oggi è sconfitto. Il prossimo arriva tra <b>%{hours}</b>h <b>%{minutes}</b>m.',
-    },
-    adventure: {
-      description: 'Avventura: affronta un mostro da solo, una volta al giorno',
-      choose: '🗺 <b>%{name}</b>, dove andiamo oggi?\n\n🟢 <b>Facile</b> — %{easy_chance} di vincere: +%{easy_reward} o −%{easy_penalty} cm\n🟡 <b>Media</b> — %{medium_chance}: +%{medium_reward} o −%{medium_penalty} cm\n🔴 <b>Difficile</b> — %{hard_chance}: +%{hard_reward} o −%{hard_penalty} cm, e il bottino può contenere un /grow in più',
-      buttons: {
-        easy: '🟢 Facile',
-        medium: '🟡 Media',
-        hard: '🔴 Difficile',
-      },
-      difficulty: {
-        easy: 'un\'avventura facile',
-        medium: 'un\'avventura media',
-        hard: 'un\'avventura difficile',
-      },
-      monsters: {
-        easy: ['un ratto selvatico', 'un goblin assonnato', 'un\'oca arrabbiata', 'una melma'],
-        medium: ['un troll di palude', 'un predone orco', 'un ragno gigante', 'un lupo mannaro'],
-        hard: ['un drago', 'un lich', 'un kraken', 'il Re dei Cetrioli'],
-      },
-      won: '⚔️ <b>%{name}</b> è partito per %{difficulty} e ha sconfitto %{monster}! Bottino: <b>+%{reward} cm</b>, ora il pisello è lungo <b>%{length} cm</b>.',
-      lost: '🩸 <b>%{name}</b> è partito per %{difficulty}, ma %{monster} era più forte. Persi <b>%{penalty} cm</b>, ora il pisello è lungo <b>%{length} cm</b>.',
-      bonus_attempt: '🎁 Il mostro ha lasciato un tentativo /grow in più! Ti aspetta finché non ti serve.',
-      already: 'Sei già stato in avventura oggi.',
-      no_dick: 'Prima fai crescere il tuo pisello con /grow!',
-    },
   },
   inline: {
     results: {
@@ -289,9 +217,6 @@ export default {
         stats: 'Statistiche',
         loan: 'Sei in debito? Chiedi un prestito!',
         shrinks: 'Vedi gli accorciamenti recenti',
-        lottery: 'Lotteria del giorno',
-        boss: 'Boss del raid',
-        adventure: 'Parti per un\'avventura',
       },
     },
     callback: {
@@ -341,9 +266,6 @@ export default {
     shrink: 'Un pisello che non cresce da %{days} giorni si accorcia un po\' ogni giorno, e la chat viene a sapere chi ha perso quanto. /shrinks lo mostra di nuovo.',
     dod: 'Inoltre, ogni giorno in ogni chat con /dod si elegge <i>il Pisello del Giorno</i>. Il titolo porta al suo proprietario dei centimetri bonus. Partecipano solo i giocatori attivi che hanno fatto crescere il loro cetriolo almeno una volta nell\'ultima settimana.',
     pvp: 'Se vuoi allungare ancora di più il tuo fratellino e sei pronto a rischiare, sfida i tuoi amici. Basta piazzare una scommessa con /pvp! Il vincitore ottiene i centimetri indicati, il perdente li perde. Semplice.',
-    adventure: '⚔️ <b>PvE.</b> Una volta al giorno puoi partire per un\'/adventure: scegli un mostro facile, medio o difficile. Più è difficile, più grande è il bottino — e più puoi perdere.',
-    boss: 'Con tutta la chat puoi combattere il boss del raid — /boss. Ognuno può colpirlo una volta ogni %{cooldown} minuti, e un pisello più lungo colpisce più forte, ma il boss contrattacca. Quando cade, la ricompensa è divisa in base al danno inflitto e il colpo finale riceve un bonus. Un boss non sconfitto in %{lifetime} giorni scappa.',
-    lottery: '🎰 <b>Lotteria.</b> Ogni giorno in ogni chat c\'è una /lottery: un biglietto costa <b>%{price} cm</b>, fino a %{max} biglietti al giorno. Dopo la mezzanotte UTC si estrae il vincitore — più biglietti, più probabilità — che prende tutto il montepremi più un bonus del %{bonus} dal bot. Con meno di %{min} giocatori i biglietti vengono rimborsati.',
     promo: 'Attiva i codici promozionali per centimetri extra con il comando /promo in chat privata.',
     import: '<b>Aspetta, conosco già bot simili su Telegram e lì ce l\'ho enorme…</b>\n\nCon il comando /import, inviato in risposta a un messaggio di un altro bot con la sua classifica, qualsiasi amministratore della chat può importare i piselli già esistenti. Al momento sono supportati: %{bots}.\n\nPerché l\'importazione riesca, il giocatore deve già avere un pisello in questo bot! Le due lunghezze si sommano, così nessun progresso va perso. Inoltre il bot deve ricevere temporaneamente i diritti di amministratore per poter leggere il messaggio dell\'altro bot.',
     inline: '<b>L\'amministratore della chat non permette di aggiungere bot sconosciuti?</b>\n\nSi può giocare anche senza il bot nella chat! Usa le query inline: scrivi lo username del bot dopo il segno <code>@</code> e uno spazio per avere gli stessi comandi!',
@@ -353,7 +275,7 @@ export default {
     contacts_support: 'In caso di problemi, scrivi al mio proprietario con il comando /support.',
   },
   privacy: {
-    text: 'Ecco cosa conservo e perché:\n\n1️⃣ Il tuo ID Telegram e il tuo nome — per mostrare la classifica e i risultati di battaglie, raid e lotterie;\n2️⃣ La data in cui ti ho visto per la prima volta — i nuovi arrivati hanno un periodo di crescita senza accorciamenti;\n3️⃣ Gli ID delle chat — perché ogni chat abbia i suoi piselli, sia con i comandi sia in modalità inline;\n4️⃣ Per ogni chat: le lunghezze, l\'ora dell\'ultima crescita, i prestiti, le statistiche di battaglie e PvE, i biglietti della lotteria e la serie di giorni consecutivi;\n5️⃣ Un registro dei vincitori del Pisello del Giorno, delle importazioni da altri bot, delle attivazioni dei codici promozionali e degli accorciamenti;\n6️⃣ La lingua dell\'interfaccia, se ne scegli una con /language.\n\nI dati sono conservati nel database del bot su Telegram Serverless, l\'infrastruttura di Telegram stessa, e non vengono dati a nessun altro. L\'intero schema è pubblicato insieme al codice sorgente: %{repo}',
+    text: 'Ecco cosa conservo e perché:\n\n1️⃣ Il tuo ID Telegram e il tuo nome — per mostrare la classifica e i risultati delle battaglie;\n2️⃣ La data in cui ti ho visto per la prima volta — i nuovi arrivati hanno un periodo di crescita senza accorciamenti;\n3️⃣ Gli ID delle chat — perché ogni chat abbia i suoi piselli, sia con i comandi sia in modalità inline;\n4️⃣ Per ogni chat: le lunghezze, l\'ora dell\'ultima crescita, i prestiti, le statistiche delle battaglie e la serie di giorni consecutivi;\n5️⃣ Un registro dei vincitori del Pisello del Giorno, delle importazioni da altri bot, delle attivazioni dei codici promozionali e degli accorciamenti;\n6️⃣ La lingua dell\'interfaccia, se ne scegli una con /language.\n\nI dati sono conservati nel database del bot su Telegram Serverless, l\'infrastruttura di Telegram stessa, e non vengono dati a nessun altro. L\'intero schema è pubblicato insieme al codice sorgente: %{repo}',
     contacts_support: 'Per far cancellare i tuoi dati o averne una copia, scrivi tramite /support.',
   },
 };

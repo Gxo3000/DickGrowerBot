@@ -1,8 +1,7 @@
 # AGENTS.md — the Telegram Serverless version
 
 This file covers the bot in `tgcloud/`: a JavaScript rewrite of DickGrowerBot for
-[Telegram Serverless](https://core.telegram.org/bots/serverless) (tgcloud), with PvE and a lottery on
-top. The Rust bot in `src/` is the original and is described in `CLAUDE.md`; the two share no code
+[Telegram Serverless](https://core.telegram.org/bots/serverless) (tgcloud). The Rust bot in `src/` is the original and is described in `CLAUDE.md`; the two share no code
 and no database. The platform's own reference is [docs/tgcloud-sdk.md](docs/tgcloud-sdk.md).
 
 ## Commands
@@ -48,16 +47,15 @@ inline message. That is what lets every game run both from a command and from th
 * **No transactions.** Every rule that two concurrent updates could break is one conditional
   statement: the once-a-day growth is the `WHERE` of the upsert in `commitGrowth`, the Dick of the Day
   is the primary key of `dicks_of_day`, a battle offer is taken once by `claimBattle`, a loan resets
-  the length with a compare-and-set, a boss is killed once by `claimKill`, a lottery is drawn once by
-  `claimDraw`, an adventure is taken once a day by `claimAdventure`. Add a feature the same way:
-  claim first, in one statement, then do the rest.
+  the length with a compare-and-set, the day's chores of a chat are claimed by `claimMaintenance`.
+  Add a feature the same way: claim first, in one statement, then do the rest.
 * **What the perks write is written after the growth.** `computeIncrement` is pure and returns a
   `commit` for the loan payment and the perk states; the caller runs it only once its own write went
   through, so a refused growth leaves no trace of its perks.
 * **No foreign keys.** Integrity is the code's: `mergeChats` in `repo/chats.js` moves every
   chat-scoped table, so a new chat-scoped table must be added there.
-* **No scheduler.** Whatever happens once a day — the shrink of neglected dicks, the lottery draws,
-  a boss escaping — is done by `dailyChores`, run by the first request of a chat after UTC midnight
+* **No scheduler.** Whatever happens once a day — the shrink of neglected dicks, the cleanup of
+  stale counters — is done by `dailyChores`, run by the first request of a chat after UTC midnight
   and claimed with `maintained_day`, so it runs once. A chat where nobody plays has nothing to do.
 * **The database is SQLite.** Raw SQL through the `sql` tag; times are unix seconds and days are
   whole UTC days since the epoch (`lib/time.js`).
@@ -67,10 +65,12 @@ inline message. That is what lets every game run both from a command and from th
 ## What counts as a growth
 
 `commitGrowth` is the growth and the only one: it moves `grown_at` and spends a bonus attempt only
-when one is needed. Every other change of a length — a battle, a prize, a promo code, a shrink, a
-counterattack — goes through `addLength`/`spendLength`/`award` and leaves `grown_at` alone.
+when one is needed. Every other change of a length — a battle, the Dick of the Day award, a promo
+code, an import, a shrink — goes through `addLength` (or a statement of its own) and leaves
+`grown_at` alone.
 
-A prize (`award`) pays the active loan its share first, the same share a growth pays.
+The winner of a battle pays the active loan its share of the bet (`withholdForLoan`), the same share
+a growth pays.
 
 ## Chats
 
@@ -78,16 +78,6 @@ A chat is known by its Telegram id, by the `chat_instance` of its buttons, or bo
 under a group message carries both and ties them together; an inline message carries the instance,
 and the id too when its `inline_message_id` encodes a supergroup (`lib/inline_id.js`). A chat known
 twice is merged into one, lengths and counters summed (`resolveChat`).
-
-## The new games
-
-* **/adventure** — once a day per chat, three difficulties with their own odds, rewards and losses;
-  a won hard one may drop a bonus `/grow` attempt.
-* **/boss** — one boss per chat at a time. Hits have a cooldown and get stronger with the length;
-  the boss may strike back. The pot is shared by damage, the killing blow gets a bonus, the next boss
-  comes the next day one level up; one that isn't beaten in time escapes, and the next is a level down.
-* **/lottery** — a lottery per chat per day, tickets bought for centimetres, drawn by `dailyChores`
-  weighted by tickets. The bot adds `jackpotBonusRatio` to the pot; too few players get a refund.
 
 ## Tests
 

@@ -97,17 +97,6 @@ async function mergeChats(toId, fromId) {
           acquired_length = battle_stats.acquired_length + excluded.acquired_length,
           lost_length = battle_stats.lost_length + excluded.lost_length`,
     sql`DELETE FROM battle_stats WHERE chat_id = ${fromId}`,
-    sql`INSERT INTO pve_stats (uid, chat_id, adventure_day, adventures, adventures_won, boss_damage, boss_kills, earned)
-        SELECT uid, ${toId}, adventure_day, adventures, adventures_won, boss_damage, boss_kills, earned
-        FROM pve_stats WHERE chat_id = ${fromId} AND true
-        ON CONFLICT (uid, chat_id) DO UPDATE SET
-          adventure_day = max(pve_stats.adventure_day, excluded.adventure_day),
-          adventures = pve_stats.adventures + excluded.adventures,
-          adventures_won = pve_stats.adventures_won + excluded.adventures_won,
-          boss_damage = pve_stats.boss_damage + excluded.boss_damage,
-          boss_kills = pve_stats.boss_kills + excluded.boss_kills,
-          earned = pve_stats.earned + excluded.earned`,
-    sql`DELETE FROM pve_stats WHERE chat_id = ${fromId}`,
     sql`UPDATE loans AS kept SET debt = kept.debt + (
           SELECT sum(moved.debt) FROM loans moved
           WHERE moved.chat_id = ${fromId} AND moved.uid = kept.uid AND moved.repaid_at IS NULL)
@@ -120,32 +109,15 @@ async function mergeChats(toId, fromId) {
     sql`UPDATE OR IGNORE dicks_of_day SET chat_id = ${toId} WHERE chat_id = ${fromId}`,
     sql`DELETE FROM dicks_of_day WHERE chat_id = ${fromId}`,
     sql`UPDATE shrinks SET chat_id = ${toId} WHERE chat_id = ${fromId}`,
-    sql`UPDATE bosses SET status = 'escaped', finished_at = ${nowSec()} WHERE chat_id = ${fromId} AND status = 'alive'`,
-    sql`UPDATE bosses SET chat_id = ${toId} WHERE chat_id = ${fromId}`,
     sql`DELETE FROM announcements WHERE chat_id = ${fromId}`,
   ];
   for (const statement of statements) {
     await db.run(statement);
   }
-  await moveLotteries(toId, fromId);
   await db.run(sql`DELETE FROM chats WHERE id = ${fromId}`);
   if (from?.chat_instance) {
     await db.run(sql`UPDATE chats SET chat_instance = coalesce(chat_instance, ${from.chat_instance}) WHERE id = ${toId}`);
   }
-}
-
-// An open lottery of the same day in both chats can't be moved, so its tickets are refunded.
-async function moveLotteries(toId, fromId) {
-  await db.run(sql`UPDATE OR IGNORE lotteries SET chat_id = ${toId} WHERE chat_id = ${fromId}`);
-  const leftovers = await db.all(sql`SELECT id FROM lotteries WHERE chat_id = ${fromId} AND status = 'open'`);
-  for (const { id } of leftovers) {
-    await db.run(sql`
-      UPDATE dicks SET length = length + (
-        SELECT t.spent FROM lottery_tickets t WHERE t.lottery_id = ${id} AND t.uid = dicks.uid)
-      WHERE chat_id = ${toId} AND uid IN (SELECT uid FROM lottery_tickets WHERE lottery_id = ${id})`);
-    await db.run(sql`DELETE FROM lottery_tickets WHERE lottery_id = ${id}`);
-  }
-  await db.run(sql`DELETE FROM lotteries WHERE chat_id = ${fromId}`);
 }
 
 function parse(row) {

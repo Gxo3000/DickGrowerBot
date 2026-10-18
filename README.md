@@ -10,12 +10,8 @@ Telegram Serverless version
 
 `tgcloud/` holds a JavaScript rewrite of the bot that runs on
 [Telegram Serverless](https://core.telegram.org/bots/serverless) — no server, no Postgres, no Docker.
-It plays the same game (growth, the top, the Dick of the Day, battles, loans, streaks, the daily
-shrink, promo codes, imports, topics, languages, inline mode, `/support`) and adds:
-
-* **/adventure** — fight a monster alone once a day: easy, medium or hard, the harder the richer;
-* **/boss** — a raid boss for the whole chat, the reward shared by the damage dealt;
-* **/lottery** — a daily lottery with tickets bought for centimetres.
+It plays the same game: growth, the top, the Dick of the Day, battles, loans, streaks, the daily
+shrink, promo codes, imports, topics, languages, inline mode and `/support`.
 
 ```shell
 npm install

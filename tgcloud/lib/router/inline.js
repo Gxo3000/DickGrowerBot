@@ -12,9 +12,6 @@ import { inlineOffer } from '../features/pvp.js';
 import { loan } from '../features/loan.js';
 import { chatStats } from '../features/stats.js';
 import { recent, shrinkEnabled } from '../features/shrink.js';
-import { lotteryStatus } from '../features/lottery.js';
-import { bossStatus } from '../features/boss.js';
-import { adventureMenu } from '../features/adventure.js';
 import { isPromoCode, promoStartParameter } from '../features/promo.js';
 import { overLimit } from '../features/rate_limit.js';
 
@@ -29,9 +26,6 @@ const LAUNCHERS = {
   dick_of_day: { command: 'dod', run: dickOfDay },
   loan: { command: 'loan', run: loan },
   stats: { command: 'stats', run: chatStats },
-  adventure: { command: 'adventure', run: adventureMenu },
-  boss: { command: 'boss', run: bossStatus },
-  lottery: { command: 'lottery', run: lotteryStatus },
   shrinks: { command: 'shrinks', run: recent, available: shrinkEnabled },
 };
 

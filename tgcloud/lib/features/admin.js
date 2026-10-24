@@ -38,7 +38,7 @@ export async function adminCommand(name, args, lang) {
       if (!(await createCode({ code, bonus: numbers[0], capacity: numbers[1], days: numbers[2] }))) {
         return t(lang, 'commands.admin.promo_exists', { code: escapeHtml(code) });
       }
-      const created = (await listCodes()).find((row) => row.code === code);
+      const created = (await listCodes()).find((row) => row.code === code.toLowerCase());
       return t(lang, 'commands.admin.promo_added', describe(created, lang));
     }
     case 'promo_list': {

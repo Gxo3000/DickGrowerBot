@@ -2,9 +2,12 @@ import { db } from 'sdk';
 import { sql } from 'sdk/db';
 import { nowSec, today } from '../time.js';
 
+// Codes are kept in lower case, folded here rather than by SQLite, whose lower() knows only ASCII.
 export async function findCode(code) {
   return db.get(sql`
-    SELECT code, bonus_length, since_day, until_day, capacity FROM promo_codes WHERE lower(code) = lower(${code})`);
+    SELECT code, bonus_length, since_day, until_day, capacity FROM promo_codes
+    WHERE code = ${code.toLowerCase()} OR lower(code) = lower(${code})
+    LIMIT 1`);
 }
 
 export async function wasActivated(uid, code) {
@@ -38,7 +41,8 @@ export async function setAffectedChats(uid, code, affectedChats) {
 }
 
 // True when the code is new.
-export async function createCode({ code, bonus, capacity, days }) {
+export async function createCode({ code: given, bonus, capacity, days }) {
+  const code = given.toLowerCase();
   const since = today();
   const until = days ? since + days - 1 : null;
   const result = await db.run(sql`

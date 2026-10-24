@@ -23,7 +23,7 @@ async function adminSays(text) {
 }
 
 test('the owner creates a promo code, and a player activates it once in every chat', async () => {
-  assert.match(await adminSays('/promo_add SUMMER 10 2 7'), /Promo code <code>SUMMER<\/code>: 10 cm, 2 activations/);
+  assert.match(await adminSays('/promo_add SUMMER 10 2 7'), /Promo code <code>summer<\/code>: 10 cm, 2 activations/);
   assert.match(await adminSays('/promo_add SUMMER 10 2'), /already exists/);
 
   await handleMessage(pm(ALICE, '/promo summer'));
@@ -188,4 +188,15 @@ test('the help lists the games', async () => {
     assert.ok(text.includes(fragment), `the help mentions ${fragment}`);
   }
   assert.ok(text.length < 4096, `the help fits a message: ${text.length}`);
+});
+
+test('a promo code is case-insensitive in any alphabet', async () => {
+  await adminSays('/promo_add ПромоКод 7 5');
+  assert.match(await adminSays('/promo_add промокод 1 1'), /already exists/);
+  await handleMessage(message(ALICE, '/grow'));
+  await setLength(ALICE.id, 10);
+  await handleMessage(pm(ALICE, '/promo ПРОМОКОД'));
+  assert.match(lastText(), /grown by <b>7<\/b>/);
+  const dick = await dickOf(ALICE.id);
+  assert.equal(dick.length, 17);
 });

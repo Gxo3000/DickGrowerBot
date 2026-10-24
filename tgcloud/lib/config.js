@@ -3,7 +3,7 @@
 
 export const config = {
   // Telegram user ids allowed to use the admin commands (/ban, /promo_add, …) in a private chat.
-  admins: [8597880913],
+  admins: [5704764344],
 
   // Where /support relays the messages; null switches the command off.
   supportChatId: null,
